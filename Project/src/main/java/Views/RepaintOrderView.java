@@ -3,7 +3,7 @@ package Views;
 import javax.swing.*;
 import java.awt.*;
 
-public class OrderView extends JFrame {
+public class RepaintOrderView extends JFrame {
     private JPanel backPane;
     private JLabel companyName;
     private JButton orderViewButton;
@@ -23,14 +23,17 @@ public class OrderView extends JFrame {
     private JTextField textField6;
     private JTextField textField7;
     private JButton payInvoiceButton;
+    private JTextField textField8;
+    private JTextField textField9;
+    private JTextField textField10;
 
     public static void main(String[] args) {
-        OrderView orderView = new OrderView();
-        orderView.setContentPane(orderView.backPane);
-        orderView.setTitle("Order View");
-        orderView.setSize(1200, 600);
-        orderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        orderView.setVisible(true);
+        RepaintOrderView repaintOrderView = new RepaintOrderView();
+        repaintOrderView.setContentPane(repaintOrderView.backPane);
+        repaintOrderView.setTitle("Order View");
+        repaintOrderView.setSize(1200, 600);
+        repaintOrderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        repaintOrderView.setVisible(true);
     }
 
 
