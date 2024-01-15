@@ -1,10 +1,20 @@
 package Views;
 
+import Controllers.OrderController;
+import Models.RepaintOrder;
+import Models.SendMailWithAttachment;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Vector;
 
 public class RepaintOrderView extends JFrame {
-    private JPanel backPane;
+    public JPanel dashboardPanel;
     private JLabel companyName;
     private JButton orderViewButton;
     private JButton repairOrdersButton;
@@ -12,24 +22,158 @@ public class RepaintOrderView extends JFrame {
     private JButton manageInventoryButton;
     private JButton sellersButton;
     private JButton employeesButton;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField email;
+    private JTextField description;
+    private JTextField servicePrice;
     private JButton addButton;
     private JButton deleteButton;
-    private JTable productCodeTable;
-    private JTextField textField5;
-    private JTextField textField6;
-    private JTextField textField7;
     private JButton payInvoiceButton;
-    private JTextField textField8;
-    private JTextField textField9;
-    private JTextField textField10;
+    private JTextField employeeEmail;
+    private JButton statusBtn;
+    private JTable orders;
+    private JPanel rightPanel;
+
+    OrderController orderController;
+
+    public RepaintOrderView() {
+        updateTable();
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String customerEmail = email.getText();
+                String des = description.getText();
+                Double amount = Double.parseDouble(servicePrice.getText());
+                String empEmail = employeeEmail.getText();
+                orderController = new OrderController();
+                boolean status = true;
+
+                RepaintOrder repaintOrder = orderController.addRepaintOrder(customerEmail, amount, des, empEmail);
+
+                try {
+                    SendMailWithAttachment sendMailWithAttachment = new SendMailWithAttachment();
+                    sendMailWithAttachment.send(empEmail,"New Repaint Order","A new repaint order has been appointed to you!");
+                    System.out.println("Message sent");
+                }catch (Exception ex){
+                    JOptionPane.showMessageDialog(dashboardPanel, "Email is invalid", "Error", 0);
+                    status = false;
+                }
+
+                if(status){
+                    if(orderController.addRepaintOrderToDatabase())
+                    {
+                        JOptionPane.showMessageDialog(dashboardPanel, "Successfully Added a repaint order to Database", "Sucess", 1);
+                        updateTable();
+                    }else {
+                        JOptionPane.showMessageDialog(dashboardPanel, "Cannot insert a repaint order to DB", "Error", 1);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(dashboardPanel, "Email is invalid", "Error", 0);
+                }
+
+                employeeEmail.setText("Employee Email");
+                description.setText("Description");
+                servicePrice.setText("Service price");
+                email.setText("Customer Email");
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel model = (DefaultTableModel)orders.getModel();
+                int selectedIndex = orders.getSelectedRow();
+
+                String id = model.getValueAt(selectedIndex, 0).toString();
+                orderController = new OrderController();
+                try {
+                    if(orderController.deleteRepaintOrder(id)){
+                        JOptionPane.showMessageDialog(dashboardPanel, "Repaint order deleted.", "Success", 1);
+                        updateTable();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(dashboardPanel, "Could not delete the repaint order", "Error", 0);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dashboardPanel, "Could not delete repaint order", "Error", 0);
+                }
+            }
+        });
+        statusBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultTableModel model = (DefaultTableModel)orders.getModel();
+                int selectedIndex = orders.getSelectedRow();
+
+                String status = model.getValueAt(selectedIndex, 3).toString();
+                String id = model.getValueAt(selectedIndex, 0).toString();
+                String customerEmail = model.getValueAt(selectedIndex,1).toString();
+                orderController = new OrderController();
+
+                if (status.equals("0")) {
+                    try {
+                        if(orderController.updateRepaintOrderStatus(id)){
+                            JOptionPane.showMessageDialog(dashboardPanel, "Repaint order is ready now.", "Success", 1);
+                            SendMailWithAttachment sendMailWithAttachment = new SendMailWithAttachment();
+                            sendMailWithAttachment.send(customerEmail,"Vehicle is ready","Your vehicle has been repainted. Please come and collect your vehicle!");
+                            System.out.println("Message sent");
+                            updateTable();
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(dashboardPanel, "Could not update the repaint order.", "Error", 0);
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(dashboardPanel, "Could not update the repaint order.", "Error", 0);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(dashboardPanel, "Already updated this repaint order.", "Error", 0);
+                }
+            }
+        });
+    }
+
+    public void updateTable() {
+        orderController = new OrderController();
+        try {
+            ResultSet repairOrders = orderController.findRepaintOrder();
+            ResultSetMetaData resultSetMetaData = repairOrders.getMetaData();
+            int c = resultSetMetaData.getColumnCount();
+
+            DefaultTableModel model = (DefaultTableModel)orders.getModel();
+            model.setRowCount(0);
+            model.setColumnCount(6);
+            Vector vector = new Vector();
+
+            for (int i=1; i<=c; i++) {
+                vector.add(repairOrders.getString("order_id"));
+                vector.add(repairOrders.getString("customer_email"));
+                vector.add(repairOrders.getString("employee_email"));
+                vector.add(repairOrders.getString("status"));
+                vector.add(repairOrders.getString("description"));
+                vector.add(repairOrders.getString("amount"));
+            }
+            model.addRow(vector);
+            while (repairOrders.next()) {
+                Vector vector1 = new Vector();
+
+                for (int i=1; i<=c; i++) {
+                    vector1.add(repairOrders.getString("order_id"));
+                    vector1.add(repairOrders.getString("customer_email"));
+                    vector1.add(repairOrders.getString("employee_email"));
+                    vector1.add(repairOrders.getString("status"));
+                    vector1.add(repairOrders.getString("description"));
+                    vector1.add(repairOrders.getString("amount"));
+                }
+                model.addRow(vector1);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(dashboardPanel, "Could not fetch repaint order details", "Error", 0);
+            System.out.println(ex.getMessage());
+        }
+    }
 
     public static void main(String[] args) {
         RepaintOrderView repaintOrderView = new RepaintOrderView();
-        repaintOrderView.setContentPane(repaintOrderView.backPane);
+        repaintOrderView.setContentPane(repaintOrderView.dashboardPanel);
         repaintOrderView.setTitle("Order View");
         repaintOrderView.setSize(1200, 600);
         repaintOrderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,6 +182,10 @@ public class RepaintOrderView extends JFrame {
 
 
     private void createUIComponents() {
+        rightPanel = new JPanel();
+
+        rightPanel.setPreferredSize(new Dimension(200, 600));
+
         // Company icon
         ImageIcon icon = new ImageIcon("D:\\SLIIT\\1st Year\\Semester 2\\OOP\\OOP Project - Java Application\\car care\\carCare\\Project\\src\\main\\java\\Views\\images\\logo.png");
         Image iconImage = icon.getImage();
@@ -106,6 +254,6 @@ public class RepaintOrderView extends JFrame {
         Image payIconImage = payIcon.getImage();
         Image modifiedPayIcon = payIconImage.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         payIcon = new ImageIcon(modifiedPayIcon);
-        payInvoiceButton = new JButton(payIcon);
+        statusBtn = new JButton(payIcon);
     }
 }
