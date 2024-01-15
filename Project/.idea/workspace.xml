@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b1e8b5bd-eda1-429b-ba45-e7f197580d58" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Views/EmployeeView.form" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Views/EmployeeView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Views/OrderView.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Views/OrderView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Views/OrderView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Views/OrderView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Views/RepaintOrderView.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Views/RepaintOrderView.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Views/RepaintOrderView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Views/RepaintOrderView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Views/RepairOrderView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Views/RepairOrderView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Views/OrderView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Views/OrderView.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Views/RepaintOrderView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Views/RepaintOrderView.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Views/RepairOrderView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Views/RepairOrderView.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,10 +43,10 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH": "8",
-    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "17",
+    "UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH": "244",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/SLIIT/1st Year/Semester 2/OOP/OOP Project - Java Application/car care/carCare/Project",
+    "last_opened_file_path": "E:/OOPMain/carCare/Project",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -71,6 +66,7 @@
       <workItem from="1703744607521" duration="701000" />
       <workItem from="1705116695788" duration="6056000" />
       <workItem from="1705317519119" duration="4931000" />
+      <workItem from="1705328083316" duration="993000" />
     </task>
     <servers />
   </component>
